@@ -1,0 +1,93 @@
+# =========================
+# Python & Flask .gitignore
+# =========================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.pyenv/
+pip-wheel-metadata/
+pip-log.txt
+
+# Flask instance folder (for config, uploads, etc.)
+instance/
+*.db
+*.sqlite3
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm / VSCode / other IDEs
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local environment variables
+.env
+*.env
+
+# Migrations (optional: uncomment if you don't want to track them)
+#migrations/
+
+# Flask-specific cache
+flask_session/
+temp_auto_push.bat
+temp_interactive_push.bat
+branch_structure.json
+
+# Reportes .REP con datos personales de estudiantes — nunca versionar
+data/*.REP
+data/*.rep
+
+

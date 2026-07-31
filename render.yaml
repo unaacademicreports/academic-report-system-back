@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: newsletter-generator-una
+    runtime: python
+    plan: free
+    region: oregon
+    branch: main
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn run:app --workers 2 --threads 4 --worker-class gthread --bind 0.0.0.0:$PORT --timeout 300 --graceful-timeout 300"
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: JWT_SECRET_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: JWT_EXP_HOURS
+        value: "1"
+      - key: JWT_REFRESH_EXP_HOURS
+        value: "24"
+      - key: API_PREFIX
+        value: "/api"
+      - key: API_VERSION
+        value: "v1"
