@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Ficha Académica - {{ data.cedula }}</title>
+    </head>
+
+    <body>
+        <table class="header-table">
+            <tbody>
+                <tr>
+                    <td class="logo" width="120px">
+                        <img src="{{ logo_uri }}" alt="Logo Universidad Nacional Abierta">    
+                    </td>
+                    <td align="start" width="100%">
+                        <span class="title">UNIVERSIDAD NACIONAL ABIERTA</span>
+                        <span class="subtitle">CENTRO LOCAL TÁCHIRA</span>
+                        <span class="doc-type">FICHA DE EVALUACIÓN</span>
+                    </td>
+                    <td width="120px">
+                        <span class="date">Fecha de Emisión: {{ data.fecha_emision }}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <section class="sec-student">
+            <table class="student-data">
+                <tbody>
+                    <tr>
+                        <th align="left">Nombres Y Apellidos</th>
+                        <th align="left">Carrera</th>
+                    </tr>
+                    <tr>
+                        <td>{{ data.nombre }}</td>
+                        <td>{{ data.carrera }}</td>
+                    </tr>
+                    <tr>
+                        <th align="left">Cédula de Identidad</th>
+                        <th> </th>
+                    </tr>
+                    <tr>
+                        <td>{{ data.cedula }}</td>
+                        <td> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="data-student">
+            {% for periodo in data.periodos %}
+            <div class="period-title">
+                <strong>Período Académico:</strong> {{ periodo.codigo }}
+            </div>
+
+            <table class="table-grades">
+                <thead>
+                    <tr>
+                        <th align="left" width="200px">Código</th>
+                        <th align="left">Asignatura</th>
+                        <th align="left">Condición</th>
+                        <th align="left">Objetivos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for materia in periodo.materias %}
+                    <tr>
+                        <td class="center" width="200px">{{ materia.codigo_asignatura }}</td>
+                        <td>{{ materia.asignatura }}</td>
+                        <td class="center">{{ materia.condicion }}</td>
+                        <td class="center">{{ materia.nota_final }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="center">No hay materias registradas en este período.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endfor %}
+        </section>
+
+        <div class="footer">
+            <p>Fecha de Emisión: {{ data.fecha_emision }}</p>
+            <p>El presente documento es una ficha académica de evaluación, generada automáticamente por el sistema de
+                información de la Universidad Nacional Abierta.</p>
+            <p>Para mayor información, visite nuestro sitio web: www.una.edu.ve</p>
+        </div>
+
+
+        <style>
+            .footer p {
+                font-size: 12px;
+                text-align: left;
+                color: #737782;
+            }
+            /*  */
+            table.header-table {
+                border-collapse: collapse;
+            }
+            table.header-table tr td{
+                padding: 8px;
+            }
+            table.header-table tr td {
+                vertical-align: middle;
+                border: none;
+            }
+            table.header-table tr td.logo img {
+            }
+            table.header-table tr td span {
+                display: block;
+                font-size: 14px;
+                font-weight: 700;
+                padding: 0px;
+                margin: 0px;
+            }
+            table.header-table tr td span.date {
+                font-size: 12px;
+                color: #737782;
+            }
+            table.header-table tr td span.title {
+                font-size: 24px;
+                font-weight: 800;
+                color:#003E81;
+            }
+            table.header-table tr td span.subtitle {
+                font-size: 14px;
+                font-weight: 500;
+                color:#4F5F7D;
+            }
+            table.header-table tr td span.doc-type {
+                font-size: 12px;
+                font-weight: 300;
+                color:#737782;
+            }
+            /*  */
+            .sec-student {
+                overflow: hidden;
+                border-radius: 8px;
+            }
+            table.student-data {
+                border-collapse: collapse;
+            }
+            table.student-data tbody tr td {
+                background-color: #F3F3FA;
+                padding: 4px 12px;
+            }
+
+            table.student-data tbody tr th {
+                background-color: #F3F3FA;
+                padding: 2px 12px;
+            }
+            /*  */
+            .data-student {
+                margin: 24px 0px;
+            }
+            .data-student .period-title {
+                background-color: #EFF6FF;
+                color: #003E81;
+                padding: 8px;
+                font-size: 16px;
+                margin-top: 30px;
+                border-left: 4px solid #003E81;
+                margin-bottom: 24px;
+            }
+            .data-student .table-grades {
+                border-collapse: collapse;
+            }
+            .data-student .table-grades thead tr th {
+                background-color: #003E81;
+                padding: 2px 12px;
+                border: 1px solid #003E81;
+                color: #FFF;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+            .data-student .table-grades tbody tr td {
+                background-color: #F3F3FA;
+                padding: 5px 12px;
+                border: 0px solid #FFF;
+                font-weight: 600;
+            }
+        </style>
+    </body>
+</html>
