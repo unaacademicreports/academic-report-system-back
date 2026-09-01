@@ -23,13 +23,22 @@ def _mask_cedula(identification: str) -> str:
 
 
 def _get_logo_uri() -> str:
+    """Devuelve el logo como data URI, o cadena vacía si el archivo no está disponible.
+
+    El logo es decorativo: si falta, la ficha se genera igual sin imagen en lugar de
+    tumbar el endpoint con un 500.
+    """
     global _logo_uri_cache
     if _logo_uri_cache is None:
         # root_path apunta a la carpeta "app", por lo que subimos un nivel para llegar a "static"
         logo_path = os.path.abspath(os.path.join(current_app.root_path, '..', 'static', 'img', 'logo-una.png'))
-        with open(logo_path, "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
-        _logo_uri_cache = f'data:image/png;base64,{encoded_string}'
+        try:
+            with open(logo_path, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+            _logo_uri_cache = f'data:image/png;base64,{encoded_string}'
+        except OSError:
+            logger.warning("Logo no disponible en %s; el PDF se generará sin logo", logo_path)
+            _logo_uri_cache = ''
     return _logo_uri_cache
 
 
@@ -40,7 +49,7 @@ def _get_logo_uri() -> str:
 def exports_student_pdf(identification, period_id):
     masked = _mask_cedula(identification)
     try:
-        logger.info("Generando PDF de ficha académica: cédula=%s período=%d", masked, period_id)
+        logger.debug("Generando PDF de ficha académica: cédula=%s período=%d", masked, period_id)
         student_data = get_student_data_from_db(identification)
 
         if not student_data:
@@ -66,7 +75,10 @@ def exports_student_pdf(identification, period_id):
             logger.error("xhtml2pdf falló generando PDF para cédula=%s período=%d", masked, period_id)
             return api_error("ERROR_PDF", "No se pudo generar el PDF.", http_status=500)
 
-        response = make_response(pdf.getvalue())
+        pdf_bytes = pdf.getvalue()
+        logger.info("PDF generado: cédula=%s período=%d (%d bytes)", masked, period_id, len(pdf_bytes))
+
+        response = make_response(pdf_bytes)
         response.headers['Content-Type'] = 'application/pdf'
         response.headers['Content-Disposition'] = f'inline; filename=ficha_{identification}_{period_id}.pdf'
         return response

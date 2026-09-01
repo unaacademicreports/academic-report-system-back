@@ -10,6 +10,10 @@ logger = logging.getLogger(__name__)
 
 _LOG_FORMAT = "%(asctime)s [%(levelname)s] [%(request_id)s] %(name)s: %(message)s"
 
+# Estas librerías loguean por request al generar el PDF; xhtml2pdf además adjunta el
+# fragmento HTML del nodo, lo que vuelca el data URI del logo entero en cada aviso.
+_NOISY_LOGGERS = ('xhtml2pdf', 'reportlab', 'PIL')
+
 
 class RequestContextFilter(logging.Filter):
     def filter(self, record):
@@ -35,6 +39,9 @@ def init_logging():
 
     root.setLevel(level)
     root.addHandler(handler)
+
+    for name in _NOISY_LOGGERS:
+        logging.getLogger(name).setLevel(logging.ERROR)
 
 
 def register_request_logging(app):
