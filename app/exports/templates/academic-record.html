@@ -10,7 +10,7 @@
             <tbody>
                 <tr>
                     <td class="logo" width="120px">
-                        <img src="{{ logo_uri }}" alt="Logo Universidad Nacional Abierta">    
+                        {% if logo_uri %}<img src="{{ logo_uri }}" alt="Logo Universidad Nacional Abierta">{% endif %}
                     </td>
                     <td align="start" width="100%">
                         <span class="title">UNIVERSIDAD NACIONAL ABIERTA</span>

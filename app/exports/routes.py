@@ -23,13 +23,22 @@ def _mask_cedula(identification: str) -> str:
 
 
 def _get_logo_uri() -> str:
+    """Devuelve el logo como data URI, o cadena vacía si el archivo no está disponible.
+
+    El logo es decorativo: si falta, la ficha se genera igual sin imagen en lugar de
+    tumbar el endpoint con un 500.
+    """
     global _logo_uri_cache
     if _logo_uri_cache is None:
         # root_path apunta a la carpeta "app", por lo que subimos un nivel para llegar a "static"
         logo_path = os.path.abspath(os.path.join(current_app.root_path, '..', 'static', 'img', 'logo-una.png'))
-        with open(logo_path, "rb") as image_file:
-            encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
-        _logo_uri_cache = f'data:image/png;base64,{encoded_string}'
+        try:
+            with open(logo_path, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+            _logo_uri_cache = f'data:image/png;base64,{encoded_string}'
+        except OSError:
+            logger.warning("Logo no disponible en %s; el PDF se generará sin logo", logo_path)
+            _logo_uri_cache = ''
     return _logo_uri_cache
 
 
