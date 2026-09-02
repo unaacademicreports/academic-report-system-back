@@ -1,10 +1,14 @@
 import os
 import ssl
+from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
 from dotenv import load_dotenv
 
-load_dotenv()
+# override=True: sin él, el reloader de Flask hereda os.environ del proceso
+# padre y los valores viejos del .env sobreviven al reinicio. El .env está en
+# .dockerignore y no existe en Render, así que en despliegue no pisa nada.
+load_dotenv(Path(__file__).resolve().parent.parent / ".env", override=True)
 
 # pg8000 no entiende los parámetros de SSL estilo libpq/psycopg2 en la query
 # string (p. ej. ?sslmode=require, channel_binding). El SSL se configura vía
